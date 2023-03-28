@@ -36,7 +36,7 @@ const getRandFloatFormated = (min, max, fixing) => {
 * @returns возвращает случайное целое число в пределах от min до max
 */
 const getRandIntFromArray = (array, min = 0) => {
-return getRandInt(min, array.length - 1);
+  return getRandInt(min, array.length - 1);
 };
 
 /**

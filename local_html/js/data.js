@@ -48,7 +48,7 @@ const getLocation = () => {
       };
 };
 
-const getOffer = (x, y) => {
+const getOffer = () => {
   return {
         title: TITLES[getRandIntFromArray(TITLES)],
         price: getRandInt(MIN_PRICE, MAX_PRICE),
@@ -67,7 +67,7 @@ const createObject = () => {
   return {
     author: getAuthor(),
     location: getLocation(),
-    offer: getOffer(this.location.x, this.location.y)
+    offer: getOffer()
     };
 };
 
@@ -77,6 +77,9 @@ const getAdvertizements = () => {
     obj.offer.address = `${obj.location.x}, ${obj.location.y}`;
     ADVERTIZEMENTS.push(obj);
   }
+  return ADVERTIZEMENTS;
 };
-export {ADVERTIZEMENTS};
-export{getAdvertizements};
+
+
+
+export {getAdvertizements};
