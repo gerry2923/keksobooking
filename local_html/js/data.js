@@ -36,9 +36,8 @@ const DESCRIPTIONS = ["Самый дизайнерский и уютный хо�
                       "Звукоизолированные номера оборудованы телевизором с плоским экраном, а в некоторых имеется уютная гостиная зона, мини-бар. В собственной ванной комнате с подогреваемым полом предоставляются халаты, тапочки и бесплатные туалетно-косметические принадлежности. "];
 
 
-
 const getAuthor = () => {
-  return {avatar: `'img/avatars/user${getRandIntFormated(1, 10, 2, 0)}.png'` };
+  return {avatar: `img/avatars/user${getRandIntFormated(1, 8, 2, 0)}.png` };
 };
 
 const getLocation = () => {
@@ -59,7 +58,7 @@ const getOffer = () => {
         checkout: CHECKIN_OUT[getRandIntFromArray(CHECKIN_OUT)],
         features: FEATURES.slice(getRandIntFromArray(FEATURES)),
         description: DESCRIPTIONS[getRandIntFromArray(DESCRIPTIONS)],
-        photos: PHOTOS[getRandIntFromArray(PHOTOS)]
+        photos: PHOTOS.slice(getRandIntFromArray(PHOTOS))
     };
 };
 
