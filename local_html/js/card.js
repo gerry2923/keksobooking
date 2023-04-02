@@ -7,10 +7,10 @@ const HousingType = {
   "palace": "Дворец"
 };
 const cardsData = getAdvertizements();
-console.log(cardsData);
+// console.log(cardsData);
 const cardsListFragment = document.createDocumentFragment();
 const cardTemplate = document.querySelector("#card").content.querySelector('.popup');;
-console.log(cardTemplate);
+// console.log(cardTemplate);
 
 const fillCardTemplate = (cardTempl, card) => {
   cardTempl.querySelector('.popup__title').textContent = card.offer.title;
@@ -48,3 +48,4 @@ const cardTempl = cardTemplate.cloneNode(true);
 
 const mapCanvas = document.querySelector('#map-canvas');
 mapCanvas.appendChild(cardsListFragment);
+mapCanvas.remove(cardsListFragment)
