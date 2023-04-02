@@ -35,17 +35,16 @@ const fillCardTemplate = (cardTempl, card) => {
   return cardTempl;
 };
 
-const card = cardsData[0];
-const cardTempl = cardTemplate.cloneNode(true);
-  fillCardTemplate(cardTempl, card);
-  cardsListFragment.appendChild(cardTempl);
+// const card = cardsData[0];
+// const cardTempl = cardTemplate.cloneNode(true);
+// fillCardTemplate(cardTempl, card);
+// cardsListFragment.appendChild(cardTempl);
 
-// cardsData.forEach( card => {
-//   const cardTempl = cardTemplate.cloneNode(true);
-//   fillCardTemplate(cardTempl, card);
-//   cardsListFragment.appendChild(cardTempl);
-// });
+/// cardsData.forEach( card => {
+///   const cardTempl = cardTemplate.cloneNode(true);
+///   fillCardTemplate(cardTempl, card);
+///   cardsListFragment.appendChild(cardTempl);
+/// });
 
-const mapCanvas = document.querySelector('#map-canvas');
-mapCanvas.appendChild(cardsListFragment);
-mapCanvas.remove(cardsListFragment)
+// const mapCanvas = document.querySelector('#map-canvas');
+// mapCanvas.appendChild(cardsListFragment);
