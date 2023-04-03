@@ -48,3 +48,8 @@ const fillCardTemplate = (cardTempl, card) => {
 
 // const mapCanvas = document.querySelector('#map-canvas');
 // mapCanvas.appendChild(cardsListFragment);
+
+
+const loadCards = () => {};
+
+export {loadCards};

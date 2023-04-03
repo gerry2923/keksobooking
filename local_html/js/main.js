@@ -1,4 +1,5 @@
 
-import './card.js';
+import './cards.js';
 import './form.js';
-import './map.js';
+import './init-page.js';
+// import './map.js';

@@ -1,44 +1,45 @@
 console.log("in map js");
+let isMapLoaded = false;
+const addressInput = document.querySelector("#address");
 
-const setInactiveState = (className, childClassName) => {
-  const form  = document.querySelector("."+className);
-  form.classList.add(className + "--disabled");
-  const fsl = form.querySelectorAll(childClassName);
-
-  for( const fs of fsl) {
-    fs.setAttribute("disabled", "");
-  }
-};
-
-const setActiveState = (className, childClassName) => {
-  const form  = document.querySelector("."+className);
-  form.classList.remove(className + "--disabled");
-  const fsl = form.querySelectorAll(childClassName);
-
-  for( const fs of fsl) {
-    fs.removeAttribute("disabled");
-  }
-};
 
 const loadMap = () => {
-  
+  return [isMapLoaded, mainPinMarker];
 };
 
-setInactiveState("ad-form", ".ad-form__element");
-setInactiveState("map__filters", ".map__filter");
-console.log("dkdkdk");
+var map = L.map('map')
+  .on('load', () => {isMapLoaded = true;})
+  .setView([35.67820294777757, 139.76420661194183], 12);
 
-const mapp = document.querySelector('#map');
-console.log(mapp);
-// L.map('map').setView({
-//     lat: 59.92746,
-//     lng: 30.31127
-//   }, 10);
+var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
 
-//   L.tileLayer(
-//     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-//     {
-//       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-//     },
-//   ).addTo(map);
+osm.addTo(map);
+
+const mainPinIcon = L.icon({
+  iconUrl: 'leaflet/img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
+
+const mainPinMarker = L.marker(
+  {
+    lat: 35.67820294777757, 
+    lng: 139.76420661194183
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+  
+mainPinMarker.addTo(map);
+
+export {loadMap};
+
+
+
+
+
 
