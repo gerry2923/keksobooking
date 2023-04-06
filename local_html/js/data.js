@@ -39,12 +39,12 @@ const DESCRIPTIONS = ["Самый дизайнерский и уютный хо�
 const getAuthor = () => {
   return {avatar: `img/avatars/user${getRandIntFormated(1, 8, 2, 0)}.png` };
 };
-
+// [35.65000 - 37.70000][139.7000, 139.80000]
 const getLocation = () => {
   return {
-        x: getRandFloatFormated(35.65000, 37.70000, 5),
-        y: getRandFloatFormated(139.7000, 139.80000, 5)
-      };
+      x: getRandFloatFormated(35.60000, 35.80000, 5),
+      y: getRandFloatFormated(139.6800, 139.90000, 5)
+    };
 };
 
 const getOffer = () => {
@@ -70,15 +70,17 @@ const createObject = () => {
     };
 };
 
-const getAdvertizements = () => {
+const fillDataArray = () => {
   for(let i = 0; i < ADV_COUNT; i++) {
     const obj = createObject();
     obj.offer.address = `${obj.location.x}, ${obj.location.y}`;
     ADVERTIZEMENTS.push(obj);
   }
-  return ADVERTIZEMENTS;
 };
 
-
+const getAdvertizements = () => {
+  fillDataArray();
+  return ADVERTIZEMENTS;
+};
 
 export {getAdvertizements};

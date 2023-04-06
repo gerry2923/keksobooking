@@ -1,7 +1,10 @@
-import {loadMap} from "./map.js";
-import {loadCards} from "./cards.js";
+import {loadMap, setDataPins} from "./map.js";
+// import {loadCards} from "./cards.js";
 
 const addressInput = document.querySelector("#address");
+// addressInput.setAttribute("readonly", "");
+addressInput.setAttribute("onmousedown", "return false");
+addressInput.setAttribute("onselectstart", "return false");
 
 const setInactiveState = (className, childClassName) => {
   const form  = document.querySelector("."+className);
@@ -44,7 +47,7 @@ if(loadObj[0]) {
     setAddresCoord(evt.target, addressInput);
   });
 
-  loadCards();
+  setDataPins();
 }
 
 

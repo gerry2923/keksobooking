@@ -1,3 +1,6 @@
+import {getAdvertizements} from "./data.js";
+import {createCard} from "./cards.js";
+
 console.log("in map js");
 let isMapLoaded = false;
 const addressInput = document.querySelector("#address");
@@ -36,7 +39,47 @@ const mainPinMarker = L.marker(
   
 mainPinMarker.addTo(map);
 
-export {loadMap};
+// создание существующих пинов на основе карт
+
+const setDataPins = () => {
+  const dataObjList = getAdvertizements();
+  // console.log(dataObjList[0].author.avatar);
+  // dataObjList[0].author.avatar = "";
+  // console.log(dataObjList[0].author.avatar);
+
+  dataObjList.forEach( (cardInfo) => {
+
+    const pinIcon = L.icon({
+      iconUrl: "leaflet/img/pin.svg",
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
+
+    const pinMarker = L.marker(
+      {
+       lat: cardInfo.location.x,
+       lng: cardInfo.location.y, 
+      },
+      {
+        icon: pinIcon
+      },
+    );
+
+    pinMarker
+      .addTo(map)
+      .bindPopup(
+        createCard(cardInfo),
+        {
+          keepInView: true,
+        },
+      );
+
+  });
+  return console.log("pin-pin");
+};
+
+
+export {loadMap, setDataPins};
 
 
 
