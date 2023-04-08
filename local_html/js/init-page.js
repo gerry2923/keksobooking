@@ -48,6 +48,9 @@ if(loadObj[0]) {
   });
 
   setDataPins();
+
+  const change = new Event("change");
+  document.querySelector(".rooms").dispatchEvent(change);
 }
 
 
