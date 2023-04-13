@@ -52,4 +52,12 @@ const getRandIntFormated = (min, max, total, fill) => {
   return getRandInt(min, max).toString().padStart(total, fill);
 };
 
-export {getRandFloat, getRandInt, getRandFloatFormated, getRandIntFromArray, getRandIntFormated};
+const checkEscapeKey  = (key) => {
+  return (key === 'Esc' || key === 'Escape') ? true : false;
+};
+
+const checkEnterKey = (key) => {
+  return (key === 'Enter') ? true : false;
+};
+
+export {getRandFloat, getRandInt, getRandFloatFormated, getRandIntFromArray, getRandIntFormated, checkEscapeKey, checkEnterKey};

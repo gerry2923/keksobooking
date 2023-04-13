@@ -1,8 +1,10 @@
+import { showError } from "./error.js";
+
 // Получить данные с сервера
 
 const Urls = {
   "GET": 'https://23.javascript.pages.academy/keksobooking/data',
-  "POST": ''
+  "POST": 'https://23.javascript.pages.academy/keksobooking'
 }
 
 const createFetch = (onSuccess,onError, method) => () => {
@@ -12,7 +14,7 @@ const createFetch = (onSuccess,onError, method) => () => {
         {
           method: method,
           credentials: "same-origin",
-          // body: data // new FormData()
+          //body: data //new FormData(evt.target)
         }
       )
         .then((response) => {

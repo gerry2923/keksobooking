@@ -1,3 +1,6 @@
+import { createFetch } from './fetch.js';
+import { checkEnterKey } from './util.js';
+
 const HousingPricePerNight = {
   "flat": 1000,
   "bungalow" : 0,
@@ -19,6 +22,10 @@ const price = document.querySelector('#price');
 const timein = document.querySelector('#timein');
 const timeoutList = document.querySelectorAll('#timeout option');
 const capacity = document.querySelector(".capacity");  
+
+const form = document.querySelector('.ad-form');
+const btnSubmit = document.querySelector('.ad-form__submit');
+const btnReset = document.querySelector('.ad-form__reset');
 
 const onChangePricePerNight = (evt) => {
   const key = evt.target.selectedOptions[0].value;
@@ -94,6 +101,8 @@ price.addEventListener("input", (evt) => {
   price.reportValidity();
 });
 
+
+
 const rooms = document.querySelector(".rooms");
 
 const resetCapacity = () => {
@@ -123,5 +132,55 @@ const setCapacity = (evt) => {
 
 rooms.addEventListener("change", setCapacity);
 rooms.dispatchEvent(new Event('change'));
+
+
+const sendFrom = createFetch(()=>{}, ()=>{}, 'POST');
+
+
+const onSubmitClick = (evt) => {
+  evt.preventDefault();
+  // sendFrom();
+  console.log("45454");
+  console.log(evt.target);
+
+  const data = new FormData(evt.target);
+  console.log(data);
+};
+
+const onSubmitKey = (evt) => {
+
+  evt.preventDefault();
+ 
+  if(checkEnterKey(evt.key)) {
+    const data = new FormData(evt.target);
+    console.log(data);
+  }
+};
+
+const onResetClick = (evt) => {
+
+};
+
+const onResetKey = (evt) => {
+  if(checkEnterKey(evt.key)) {
+
+  }
+};
+
+
+
+
+
+form.addEventListener('submit', (evt) => {
+  // const data = new FormData(evt.target);
+  // console.log(typeof data);
+  // console.log(data);
+  // console.log(data.get("title"));
+  // console.log('***');
+});
+btnSubmit.addEventListener('keydown', onSubmitKey);
+
+btnReset.addEventListener('click', onResetClick);
+btnSubmit.addEventListener('keydown', onResetKey);
 
 export {setAddress};
