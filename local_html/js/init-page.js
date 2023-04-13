@@ -1,57 +1,79 @@
-import {loadMap, setDataPins} from "./map.js";
-// import {loadCards} from "./cards.js";
+import {loadMap, setDataPins, getMainPinCoord, setMainPinEvent} from './map.js';
+import { setAddress } from './form.js'; 
+import { showError } from './error.js';
+import { createFetch } from './fetch.js';
 
-const addressInput = document.querySelector("#address");
-// addressInput.setAttribute("readonly", "");
-addressInput.setAttribute("onmousedown", "return false");
-addressInput.setAttribute("onselectstart", "return false");
+/**
+ * 
+ * @param {*} selector  - класс или id элемента, детей первой вложенности которого надо отключить или включить 
+ * @param {*} off  - отключить элемент (true) или включить (false)
+ */
+const toggleAccessChildren = (selector, off = true) => {
 
-const setInactiveState = (className, childClassName) => {
-  const form  = document.querySelector("."+className);
-  form.classList.add(className + "--disabled");
-  const fsl = form.querySelectorAll(childClassName);
+  const children = Array.from(document.querySelector(selector).children);
 
-  for( const fs of fsl) {
-    fs.setAttribute("disabled", "");
+  if(off) {
+    children.forEach(child => child.setAttribute('disabled', ''));
+  } else {
+    children.forEach(child => child.removeAttribute('disabled'));
   }
+
 };
+/**
+ * 
+ * @param {*} selector - класс или if элемента, который надо отключить или включить
+ * @param {*} off  - отключить элемент (true), включить - (false)
+ */
 
-const setActiveState = (className, childClassName) => {
-  const form  = document.querySelector("."+className);
-  form.classList.remove(className + "--disabled");
-  const fsl = form.querySelectorAll(childClassName);
-
-  for( const fs of fsl) {
-    fs.removeAttribute("disabled");
+const toggleAccessElement = (selector, off = true) => {
+  
+  const className = (selector[0] === '.' ? 
+    selector.replace('.', '') : selector.replace('#', ''))  + '--disabled';
+  
+  const element = document.querySelector(selector);
+  
+    if(off) {
+    element.classList.add(className);
+  } else {
+    element.classList.remove(className);
   }
+  
 };
 
-const setAddresCoord = (mainPin, adrInp) => {
-  const coord = mainPin.getLatLng();
-  adrInp.value = `${coord.lat.toFixed(6)}, ${coord.lng.toFixed(6)}`;
+const setInactiveState = () => {
+  toggleAccessElement('.map__filters');
+  toggleAccessChildren('.map__filters');
+  toggleAccessElement('.ad-form');
+  toggleAccessChildren('.ad-form');
 };
 
-setInactiveState("ad-form", ".ad-form__element");
-setInactiveState("map__filters", ".map__filter");
+const setActiveState = () => {
+  // загрузка карты
+  if(loadMap()) {
+    try {
+    toggleAccessElement('.map__filters', false);
+    toggleAccessChildren('.map__filters', false);
+    toggleAccessElement('.ad-form', false);
+    toggleAccessChildren('.ad-form', false);
 
-const loadObj = loadMap();
+    setAddress(getMainPinCoord());
+    setMainPinEvent(setAddress);
+    getData();
 
-if(loadObj[0]) {
-  setActiveState("ad-form", ".ad-form__element");
-  setActiveState("map__filters", ".map__filter");
+    } catch (error){
+      showError(error);
+    }
+  } 
+};
 
-  const mainPinMarker = loadObj[1];
-  setAddresCoord(mainPinMarker, addressInput);
+const getData = createFetch(setDataPins, showError, 'GET');
+setInactiveState();
+setActiveState();
 
-  mainPinMarker.on('moveend', (evt) => {
-    setAddresCoord(evt.target, addressInput);
-  });
+  
+  
+  
 
-  setDataPins();
-
-  const change = new Event("change");
-  document.querySelector(".rooms").dispatchEvent(change);
-}
 
 
 

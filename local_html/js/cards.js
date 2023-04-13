@@ -34,7 +34,7 @@ const cardTemplate = document.querySelector("#card").content.querySelector('.pop
 // };
 
 const setPropertyValue = (elem, propValue) => {
-  if((typeof propValue) === "string" && !elem.classList.contains("popup__avatar")) {
+  if(((typeof propValue) === "undefined") || ((typeof propValue) === "string" && !elem.classList.contains("popup__avatar"))) {
     if(propValue){
       elem.textContent = propValue;
     } else {
@@ -70,7 +70,7 @@ const fillCardTemplate = (cardTempl, card) => {
   setPropertyValue(cardTempl.querySelector('.popup__type'), HousingType[card.offer.type]);
   setPropertyValue(cardTempl.querySelector('.popup__text--capacity'), `${card.offer.rooms} комнаты для ${card.offer.guests} гостей`);
   setPropertyValue(cardTempl.querySelector('.popup__text--time'), `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`); 
-  setPropertyValue(cardTempl.querySelector('.popup__features'),  card.offer.features.join(", "));
+  setPropertyValue(cardTempl.querySelector('.popup__features'),  (card.offer.features ? card.offer.features.join(", "): card.offer.features));
   setPropertyValue(cardTempl.querySelector('.popup__description'), card.offer.description);
   setPropertyValue(cardTempl.querySelector('.popup__photos'), card.offer.photos);
   setPropertyValue(cardTempl.querySelector('.popup__avatar'), card.author.avatar);

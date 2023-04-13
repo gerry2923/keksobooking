@@ -45,25 +45,21 @@ housing.addEventListener("change", onChangePricePerNight);
 timein.addEventListener("change", onTimeinTimeoutChange)
 
 
-// --- validation --
+// --- validation -- you can check event 'invalid'
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE_LENGTH = 1000000;
 const title = document.querySelector(".title");
+const addressInput = document.querySelector('#address');
 
-/*
-title.addEventListener('invalid', () => {
-  if(title.validity.tooShort){
-    title.setCustomValidity("Название должно состоять минимум из 2-х символов");
-  }else if(title.validity.tooLong) {
-    title.setCustomValidity("Название не должно превышать 25-ти символов");
-  } else if(title.validity.valueMissing){
-    title.setCustomValidity("Обязательное поле");
-  } else {
-    title.setCustomValidity = "";
-  }  
-});
-*/
+addressInput.setAttribute('tabindex', '-1');
+addressInput.setAttribute('onmousedown', 'return false');
+addressInput.setAttribute('onselectstart', 'return false');
+
+const setAddress = (address) => {
+  addressInput.value = address;
+};
+
 
 title.addEventListener("input", (evt) => {
   
@@ -125,5 +121,7 @@ const setCapacity = (evt) => {
   });  
 };
 
-
 rooms.addEventListener("change", setCapacity);
+rooms.dispatchEvent(new Event('change'));
+
+export {setAddress};

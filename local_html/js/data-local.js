@@ -77,10 +77,13 @@ const fillDataArray = () => {
     ADVERTIZEMENTS.push(obj);
   }
 };
-
-const getAdvertizements = () => {
+/**
+ * 
+ * @returns заполненный массив с объявлениями
+ */
+const getDataLocal = () => {
   fillDataArray();
   return ADVERTIZEMENTS;
 };
 
-export {getAdvertizements};
+export {getDataLocal};
