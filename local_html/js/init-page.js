@@ -1,7 +1,7 @@
 import {loadMap, setDataPins, getMainPinCoord, setMainPinEvent} from './map.js';
 import { setAddress } from './form.js'; 
 import { showError } from './error.js';
-import { createFetch } from './fetch.js';
+import { createFetchGet } from './fetch.js';
 
 /**
  * 
@@ -66,7 +66,7 @@ const setActiveState = () => {
   } 
 };
 
-const getData = createFetch(setDataPins, showError, 'GET');
+const getData = createFetchGet(setDataPins, showError);
 setInactiveState();
 setActiveState();
 

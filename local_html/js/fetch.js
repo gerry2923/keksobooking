@@ -7,21 +7,20 @@ const Urls = {
   "POST": 'https://23.javascript.pages.academy/keksobooking'
 }
 
-const createFetch = (onSuccess,onError, method) => () => {
+
+const createFetchGet = (onSuccess,onError) => () => {
   try {
     return fetch(
-        Urls[method],
+      'https://23.javascript.pages.academy/keksobooking/data',
         {
-          method: method,
+          method: 'GET',
           credentials: "same-origin",
-          //body: data //new FormData(evt.target)
         }
       )
         .then((response) => {
           if(response.ok) {
             return response.json();
           }
-          
           throw new Error(`Ошибка при загрузке данных ${response.status} ${response.statusText}`);
           
         })
@@ -31,9 +30,31 @@ const createFetch = (onSuccess,onError, method) => () => {
         .catch( (err) => {
           onError(err);
         });
+
     } catch (error){
       showError(error);
     }
 };
 
-  export {createFetch};
+
+const createFetchPost = (onSuccess, onError, data) => () => {
+  return fetch(
+    'https://23.javascript.pages.academy/keksobooking',
+    {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: new FormData(data)
+    })
+    .then( (response) => {
+      console.log('isResp? - ' + response.ok);
+      if(response.ok) {
+        onSuccess();
+      } else {
+        onError('Не удалось отправить форму. Попробуйте еще раз');
+      }
+    }).catch( (err) => {
+      onError('Не удалось отправить форму. Попробуйте еще раз');
+    })
+  };
+
+  export {createFetchGet, createFetchPost};

@@ -1,6 +1,5 @@
-// 1. создать всплывающее окно
-// 2. добавить обработку закрытия
-// 3. 
+import { hideMap, showMap } from "./util.js";
+
 const errorTemplate = document.querySelector('#error').content.querySelector(".error");
 
 const createErrorPopUp = (text) => {
@@ -30,22 +29,6 @@ const removePopUp = (elem) => {
 
   showMap();
 } 
-// заменить две функции одной с проверкой регулярными выражениями
-// map.getAttribute('style') -> дает строку со всеми характеристиками стиля, в которой надо найти нужное свойство + сделать проверку map.hasAttribute('style')
-
-const hideMap = ()=> {
-  const map = document.querySelector('#map');
-  if (map !== null) {
-      map.style.display = "none";
-    }
-  };
-
-const showMap = () => {
-  const map = document.querySelector('#map');
-  if(map !== null) {
-    map.style.display = "block";
-  }
-};
 
 const showError = (err) => {
   const elem = createErrorPopUp(err);

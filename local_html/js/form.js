@@ -1,5 +1,6 @@
-import { createFetch } from './fetch.js';
+import { createFetchPost } from './fetch.js';
 import { checkEnterKey } from './util.js';
+import { getMainPinCoord, setMainPinCoord } from './map.js';
 
 const HousingPricePerNight = {
   "flat": 1000,
@@ -134,53 +135,88 @@ rooms.addEventListener("change", setCapacity);
 rooms.dispatchEvent(new Event('change'));
 
 
-const sendFrom = createFetch(()=>{}, ()=>{}, 'POST');
 
-
-const onSubmitClick = (evt) => {
-  evt.preventDefault();
-  // sendFrom();
-  console.log("45454");
-  console.log(evt.target);
-
-  const data = new FormData(evt.target);
-  console.log(data);
+// -------------------------------------------------------------------------
+// обработка отправки формы
+// -------------------------------------------------------------------------
+const resetToDefaultList = (elements, attribute, compareStr = '') => {
+  Array.from(elements).forEach(element => {
+    if(element.hasAttribute(attribute)){
+      element.removeAttribute(attribute);
+      if(element.value === compareStr) {
+        element.setAttribute(attribute);
+      }
+    }
+  });
 };
 
-const onSubmitKey = (evt) => {
 
+const clearForm = () => {
+  
+  setMainPinCoord();
+  form.querySelector('#address').textContent = getMainPinCoord();
+  form.querySelector('#avatar').value = null;
+  form.querySelector('#title').textContent = '';  
+  form.querySelector('#price').minValue = '0';
+  form.querySelector('#price').placeholder = '0';
+  form.querySelector('#description').textContent = '';
+  form.querySelector('#images').value = null;
+  resetToDefaultList(form.querySelector('#type').children, 'bungalow');
+  resetToDefaultList(form.querySelector('#timein').children, 'selected', '12:00');
+  resetToDefaultList(form.querySelector('#timeout').children, 'selected', '12:00');
+  resetToDefaultList(form.querySelector('#room_number').children, 'selected', '1');
+  resetToDefaultList(form.querySelectorAll('.features input[type="checkbox"]'), 'checked');
+  
+};
+
+
+
+const sendDataSuccess = () => {
+  clearForm();
+  console.log("show message");
+  /**
+   * если все отправлено успешно, 
+   * 1. очистить поля формы и 
+   * 2. показать сообщение об удачной отпавке 
+   */
+};
+
+const sendDataError = (err) => {
+  console.log(err)
+  /**
+   * произошла ошибка
+   * 1. показать сообщение с ошибкой
+   */
+};
+const sendFrom = createFetchPost (sendDataSuccess, sendDataError,form);
+
+const onSubmit = (evt) => {
   evt.preventDefault();
- 
+  sendFrom();
+};
+
+const onSubmitKey = ()=> {
+  evt.preventDefault();
   if(checkEnterKey(evt.key)) {
-    const data = new FormData(evt.target);
-    console.log(data);
+    form.dispatchEvent(new Event('submit'));
   }
 };
 
-const onResetClick = (evt) => {
-
-};
-
-const onResetKey = (evt) => {
-  if(checkEnterKey(evt.key)) {
-
-  }
-};
-
-
-
-
-
-form.addEventListener('submit', (evt) => {
-  // const data = new FormData(evt.target);
-  // console.log(typeof data);
-  // console.log(data);
-  // console.log(data.get("title"));
-  // console.log('***');
-});
+form.addEventListener('submit', onSubmit);
 btnSubmit.addEventListener('keydown', onSubmitKey);
 
-btnReset.addEventListener('click', onResetClick);
-btnSubmit.addEventListener('keydown', onResetKey);
+// --- --- --- --- -- 
+
+// const onResetClick = (evt) => {
+
+// };
+
+// const onResetKey = (evt) => {
+//   if(checkEnterKey(evt.key)) {
+
+//   }
+// };
+// btnReset.addEventListener('click', onResetClick);
+// btnSubmit.addEventListener('keydown', onResetKey);
 
 export {setAddress};

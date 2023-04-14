@@ -60,4 +60,22 @@ const checkEnterKey = (key) => {
   return (key === 'Enter') ? true : false;
 };
 
+// заменить две функции одной с проверкой регулярными выражениями
+// map.getAttribute('style') -> дает строку со всеми характеристиками стиля, в которой надо найти нужное свойство + сделать проверку map.hasAttribute('style')
+
+const hideMap = ()=> {
+  const map = document.querySelector('#map');
+  if (map !== null) {
+      map.style.display = "none";
+    }
+  };
+
+const showMap = () => {
+  const map = document.querySelector('#map');
+  if(map !== null) {
+    map.style.display = "block";
+  }
+};
+
 export {getRandFloat, getRandInt, getRandFloatFormated, getRandIntFromArray, getRandIntFormated, checkEscapeKey, checkEnterKey};
+export {hideMap, showMap};

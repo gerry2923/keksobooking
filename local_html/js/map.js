@@ -53,6 +53,16 @@ const loadMap = () => {
   }
 };
 
+const setMainPinCoord = (lat = 35.67820294777757, lng = 139.76420661194183) => {
+  let latlng = L.latLng(lat, lng);
+  mainPinMarker.setLatLng(latlng);
+
+  // var lat = (e.latlng.lat);
+  // var lng = (e.latlng.lng);
+  // var latlng = L.latLng(5454, 6565);
+  // marker.setLatLng([lat, lng]).update();
+};
+
 const getMainPinCoord = () => {
   const coord = mainPinMarker.getLatLng();  
   return `${coord.lat.toFixed(6)}, ${coord.lng.toFixed(6)}`;
@@ -132,7 +142,7 @@ const changeFlag = () => {
       flag.setAttribute("viewBox", "0 0 378 189");
 };
 
-export {loadMap, setDataPins,getMainPinCoord, setMainPinEvent};
+export {loadMap, setDataPins,getMainPinCoord, setMainPinEvent,setMainPinCoord};
 
 
 
