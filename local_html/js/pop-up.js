@@ -1,6 +1,8 @@
 import { hideMap, showMap } from "./util.js";
 
 const errorTemplate = document.querySelector('#error').content.querySelector(".error");
+const successMsgTemplate = document.querySelector('#success').content.querySelector(".success");
+
 
 const createErrorPopUp = (text) => {
   const errTempl = errorTemplate.cloneNode(true);
@@ -12,6 +14,12 @@ const createErrorPopUp = (text) => {
   return errTempl;
 };
 
+const createSuccessPopUp = () => {
+  const successTempl = successMsgTemplate.cloneNode(true);
+  successTempl.querySelector('.success__message').innerHTML = `Ваше объявление<br>успешно размещено!`;
+  document.body.appendChild(successTempl);
+  return successTempl;
+};
 
 const closePopUpKey = (evt) => {
   if((evt.key === "Esc") || (evt.key === "Escape")) {
@@ -40,4 +48,18 @@ const showError = (err) => {
   hideMap(); 
 };
 
-export {showError};
+const hideSuccessMsg =(element) => {
+  element.remove();
+};
+
+const showSuccessMsg = () => {
+  const message = createSuccessPopUp();
+  hideMap(); 
+  
+  setTimeout(() => {
+    hideSuccessMsg(message);
+    showMap();
+  }, 5000);
+};
+
+export {showError, showSuccessMsg};

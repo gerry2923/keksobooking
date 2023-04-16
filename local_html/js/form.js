@@ -1,6 +1,7 @@
 import { createFetchPost } from './fetch.js';
 import { checkEnterKey } from './util.js';
 import { getMainPinCoord, setMainPinCoord } from './map.js';
+import { showError, showSuccessMsg } from './pop-up.js';
 
 const HousingPricePerNight = {
   "flat": 1000,
@@ -113,10 +114,10 @@ const resetCapacity = () => {
   });
 }
 
-const setCapacity = (evt) => {
-  resetCapacity();
+const setCapacity = (selectedOption = '1') => {
   const capacityOptionList = capacity.children;
-  const checkSet = new Set (HousingForGuests[evt.target.selectedOptions[0].value]);
+  //  массив возможных вариантов количества гостей
+  const checkSet = new Set (HousingForGuests[selectedOption]);
   let isSelected = false;
 
   Array.from(capacityOptionList).map(option => {
@@ -131,64 +132,72 @@ const setCapacity = (evt) => {
   });  
 };
 
-rooms.addEventListener("change", setCapacity);
-rooms.dispatchEvent(new Event('change'));
 
+const configureCapacity = (evt) => {
+  resetCapacity();
+  setCapacity(evt.target.selectedOptions[0].value);
+};
 
+resetCapacity();
+setCapacity();
+rooms.addEventListener("change", configureCapacity);
+// rooms.dispatchEvent(new Event('change'));
 
-// -------------------------------------------------------------------------
-// обработка отправки формы
-// -------------------------------------------------------------------------
-const resetToDefaultList = (elements, attribute, compareStr = '') => {
+const resetToDefaultSelection = (elements, attribute, compareStr='') => {
   Array.from(elements).forEach(element => {
     if(element.hasAttribute(attribute)){
-      element.removeAttribute(attribute);
-      if(element.value === compareStr) {
-        element.setAttribute(attribute);
-      }
+      element.removeAttribute(attribute); 
+    }
+
+    if(element.value === compareStr) {
+      element.setAttribute(attribute, '');
     }
   });
 };
 
+const resetToDefaultCheckBox = (elements, checkVal = '') => {
+  Array.from(elements).forEach(element => {
+    if(element.checked === true) {
+      element.checked = false;
+    }
+
+    if(element.value === checkVal) {
+      element.checked = true;
+    }
+  });
+};
 
 const clearForm = () => {
   
   setMainPinCoord();
-  form.querySelector('#address').textContent = getMainPinCoord();
+  form.querySelector('#address').value = getMainPinCoord();
   form.querySelector('#avatar').value = null;
-  form.querySelector('#title').textContent = '';  
-  form.querySelector('#price').minValue = '0';
-  form.querySelector('#price').placeholder = '0';
-  form.querySelector('#description').textContent = '';
+  form.querySelector('#title').value = '';  
+  form.querySelector('#description').value = '';
   form.querySelector('#images').value = null;
-  resetToDefaultList(form.querySelector('#type').children, 'bungalow');
-  resetToDefaultList(form.querySelector('#timein').children, 'selected', '12:00');
-  resetToDefaultList(form.querySelector('#timeout').children, 'selected', '12:00');
-  resetToDefaultList(form.querySelector('#room_number').children, 'selected', '1');
-  resetToDefaultList(form.querySelectorAll('.features input[type="checkbox"]'), 'checked');
+
+  form.querySelector('#price').min = '0';
+  form.querySelector('#price').placeholder = '0';
+  form.querySelector('#price').value = '';
+
+  resetToDefaultSelection(form.querySelector('#capacity').children, 'selected', '1');
+  setCapacity();
+
+  resetToDefaultSelection(form.querySelector('#type').children, 'selected', 'bungalow');
+  resetToDefaultSelection(form.querySelector('#timein').children, 'selected', '12:00');
+  resetToDefaultSelection(form.querySelector('#timeout').children, 'selected', '12:00');
+  resetToDefaultSelection(form.querySelector('#room_number').children, 'selected', '1');
+  resetToDefaultCheckBox(form.querySelectorAll('.feature__checkbox'));
   
 };
 
-
-
 const sendDataSuccess = () => {
   clearForm();
-  console.log("show message");
-  /**
-   * если все отправлено успешно, 
-   * 1. очистить поля формы и 
-   * 2. показать сообщение об удачной отпавке 
-   */
+  showSuccessMsg();
 };
 
-const sendDataError = (err) => {
-  console.log(err)
-  /**
-   * произошла ошибка
-   * 1. показать сообщение с ошибкой
-   */
-};
-const sendFrom = createFetchPost (sendDataSuccess, sendDataError,form);
+
+const sendFrom = createFetchPost(sendDataSuccess, showError,form);
 
 const onSubmit = (evt) => {
   evt.preventDefault();
@@ -205,18 +214,20 @@ const onSubmitKey = ()=> {
 form.addEventListener('submit', onSubmit);
 btnSubmit.addEventListener('keydown', onSubmitKey);
 
-// --- --- --- --- -- 
 
-// const onResetClick = (evt) => {
+const onResetClick = (evt) => {
+  evt.preventDefault();
+  clearForm();
+};
 
-// };
+const onResetKey = (evt) => {
+  evt.preventDefault();
+  if(checkEnterKey(evt.key)) {
+    clearForm();
+  }
+};
 
-// const onResetKey = (evt) => {
-//   if(checkEnterKey(evt.key)) {
-
-//   }
-// };
-// btnReset.addEventListener('click', onResetClick);
-// btnSubmit.addEventListener('keydown', onResetKey);
+btnReset.addEventListener('click', onResetClick);
+btnReset.addEventListener('keydown', onResetKey);
 
 export {setAddress};

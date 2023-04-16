@@ -1,6 +1,6 @@
 import {loadMap, setDataPins, getMainPinCoord, setMainPinEvent} from './map.js';
 import { setAddress } from './form.js'; 
-import { showError } from './error.js';
+import { showError } from './pop-up.js';
 import { createFetchGet } from './fetch.js';
 
 /**

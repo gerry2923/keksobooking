@@ -1,6 +1,6 @@
 // import {getDataLocal} from "./data-local.js";
 import { createCard } from "./cards.js";
-import { showError } from "./error.js";
+import { showError } from "./pop-up.js";
 import { DATA_ARRAY_LENGTH,setData } from "./data-server.js";
 
 let isMapLoaded = false;
