@@ -204,7 +204,7 @@ const onSubmit = (evt) => {
   sendFrom();
 };
 
-const onSubmitKey = ()=> {
+const onSubmitKey = (evt)=> {
   evt.preventDefault();
   if(checkEnterKey(evt.key)) {
     form.dispatchEvent(new Event('submit'));

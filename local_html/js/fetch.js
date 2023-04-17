@@ -53,7 +53,7 @@ const createFetchPost = (onSuccess, onError, data) => () => {
         onError('Не удалось отправить форму. Попробуйте еще раз');
       }
     }).catch( (err) => {
-      onError('Не удалось отправить форму. Попробуйте еще раз' + err.message);
+      onError('Не удалось отправить форму. Попробуйте еще раз\n' + err.message);
     })
   };
 

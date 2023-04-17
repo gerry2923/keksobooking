@@ -1,4 +1,4 @@
-import { hideMap, showMap } from "./util.js";
+import { hideMap, showMap, checkEscapeKey } from "./util.js";
 
 const errorTemplate = document.querySelector('#error').content.querySelector(".error");
 const successMsgTemplate = document.querySelector('#success').content.querySelector(".success");
@@ -11,55 +11,73 @@ const createErrorPopUp = (text) => {
   errTempl.setAttribute('style', 'z-index: 100');
   errTempl.setAttribute('style', 'overflow: visible');
   document.body.appendChild(errTempl);
-  return errTempl;
 };
 
 const createSuccessPopUp = () => {
   const successTempl = successMsgTemplate.cloneNode(true);
   successTempl.querySelector('.success__message').innerHTML = `Ваше объявление<br>успешно размещено!`;
   document.body.appendChild(successTempl);
-  return successTempl;
 };
 
-const closePopUpKey = (evt) => {
-  if((evt.key === "Esc") || (evt.key === "Escape")) {
-    removePopUp(document.querySelector(".error__button"));
+const closeKeyErrorMsg = (evt) => {
+  if(checkEscapeKey(evt.key)) {
+    const elem = document.querySelector('.error');
+    removePopUp(elem);
   } 
 };
 
-const closePopUpclick = (evt) => {
-  removePopUp(evt.target);
+const closeClickErrorMsg = () => {
+  const elem = document.querySelector('.error');
+  console.log(elem);
+  removePopUp(elem);
 };
 
 const removePopUp = (elem) => {
-  document.removeEventListener("keydown", closePopUpKey);
-  elem.parentNode.remove();
-
+  console.log(elem);
+  elem.remove();
+  document.removeEventListener('keydown', closeKeyErrorMsg);
+  document.removeEventListener('click', closeClickErrorMsg);
   showMap();
 } 
 
 const showError = (err) => {
-  const elem = createErrorPopUp(err);
-  const btnClose = elem.querySelector(".error__button");
-  
-  btnClose.addEventListener("click", closePopUpclick);
-  document.addEventListener("keydown", closePopUpKey);
-
+  createErrorPopUp(err);
+  document.addEventListener("keydown", closeKeyErrorMsg);
+  document.addEventListener('click', closeClickErrorMsg);
   hideMap(); 
 };
 
-const hideSuccessMsg =(element) => {
-  element.remove();
+const onClickHideSuccessMsg =(evt) => {
+  evt.preventDefault();
+  removeSuccessMsg();
+};
+
+const onEscHideSuccessMsg = (evt) => {
+  evt.preventDefault();
+  if(checkEscapeKey(evt.key)) {
+    console.log('all correct');
+    removeSuccessMsg();
+  }
+};
+
+const removeSuccessMsg = () => {
+  document.querySelector('.success').remove();
+  document.removeEventListener('keydown', onEscHideSuccessMsg);
+  document.removeEventListener('pointerdown', onClickHideSuccessMsg);
+  showMap();
 };
 
 const showSuccessMsg = () => {
-  const message = createSuccessPopUp();
+  createSuccessPopUp();
   hideMap(); 
   
-  setTimeout(() => {
-    hideSuccessMsg(message);
-    showMap();
-  }, 5000);
+  document.addEventListener('keydown', onEscHideSuccessMsg);
+  document.addEventListener('pointerdown', onClickHideSuccessMsg);
+
+//   // setTimeout(() => {
+//   //   hideSuccessMsg(message);
+//   //   showMap();
+//   // }, 5000);
 };
 
 export {showError, showSuccessMsg};
