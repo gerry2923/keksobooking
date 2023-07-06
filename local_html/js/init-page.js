@@ -1,8 +1,18 @@
+/* global _:readonly */
+
+
 import {loadMap, setDataPins, getMainPinCoord, setMainPinEvent} from './map.js';
 import { setAddress, setClearFilterEvent } from './form.js'; 
 import { showError } from './pop-up.js';
 import { createFetchGet } from './fetch.js';
 import { setFilterHandler } from './filter.js';
+
+const RERENDER_DELAY = 500;
+
+console.log(_.random(0, 5));
+
+
+
 
 /**
  * 
@@ -77,7 +87,7 @@ const getDataAndSetFilter = createFetchGet( (pins) => {
 
   setDataPins(pins);
 
-  setFilterHandler(() => setDataPins(pins));
+  setFilterHandler(_.debounce(() => setDataPins(pins), RERENDER_DELAY));
 
   setMainPinEvent(setAddress, () => setDataPins(pins));
 
