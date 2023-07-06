@@ -1,7 +1,8 @@
 import {loadMap, setDataPins, getMainPinCoord, setMainPinEvent} from './map.js';
-import { setAddress } from './form.js'; 
+import { setAddress, setClearFilterEvent } from './form.js'; 
 import { showError } from './pop-up.js';
 import { createFetchGet } from './fetch.js';
+import { setFilterHandler } from './filter.js';
 
 /**
  * 
@@ -57,8 +58,12 @@ const setActiveState = () => {
     toggleAccessChildren('.ad-form', false);
 
     setAddress(getMainPinCoord());
-    setMainPinEvent(setAddress);
-    getData();
+    
+    
+    // setMainPinEvent(setAddress);
+    
+    // getData();
+    getDataAndSetFilter();
 
     } catch (error){
       showError(error);
@@ -66,7 +71,21 @@ const setActiveState = () => {
   } 
 };
 
-const getData = createFetchGet(setDataPins, showError);
+// const getData = createFetchGet(setDataPins, showError);
+
+const getDataAndSetFilter = createFetchGet( (pins) => {
+
+  setDataPins(pins);
+
+  setFilterHandler(() => setDataPins(pins));
+
+  setMainPinEvent(setAddress, () => setDataPins(pins));
+
+  setClearFilterEvent(() => setDataPins(pins));
+
+},showError );
+
+
 setInactiveState();
 setActiveState();
 

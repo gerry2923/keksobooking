@@ -1,11 +1,15 @@
 // import {getDataLocal} from "./data-local.js";
 import { createCard } from "./cards.js";
 import { showError } from "./pop-up.js";
-import { DATA_ARRAY_LENGTH,setData } from "./data-server.js";
+import { DATA_ARRAY_LENGTH, setData, getArrayLength } from "./data-server.js";
+import { comparePins } from "./filter.js";
 
 let isMapLoaded = false;
 let mainPinMarker = {};
 let map = {};
+let pinMapLayerGoup = {};
+const MAIN_PIN_X = 35.67820294777757;
+const MAIN_PIN_Y = 139.76420661194183;
 
 const loadMap = () => {
   try {
@@ -32,8 +36,8 @@ const loadMap = () => {
     // создание главного пина
     mainPinMarker = L.marker(
       {
-        lat: 35.67820294777757, 
-        lng: 139.76420661194183
+        lat: MAIN_PIN_X, 
+        lng: MAIN_PIN_Y
       },
       {
         draggable: true,
@@ -43,7 +47,8 @@ const loadMap = () => {
 
     // добавление главного пина
     mainPinMarker.addTo(map);
-
+    // создаем групповой слой, в который будем добавлять пины
+    pinMapLayerGoup = L.layerGroup().addTo(map);
     // добавить событие на изменение положения ползунка
     
     return isMapLoaded;
@@ -53,7 +58,7 @@ const loadMap = () => {
   }
 };
 
-const setMainPinCoord = (lat = 35.67820294777757, lng = 139.76420661194183) => {
+const setMainPinCoord = (lat = MAIN_PIN_X, lng = MAIN_PIN_Y) => {
   let latlng = L.latLng(lat, lng);
   mainPinMarker.setLatLng(latlng);
 
@@ -72,14 +77,39 @@ const removeMap = () => {
   map.remove();
 };
 
-const setMainPinEvent = (changeInput) => {
+const setMainPinEvent = (changeInput, cb) => {
   mainPinMarker.on('moveend', (evt) => {
     changeInput(`${evt.target.getLatLng().lat.toFixed(6)}, ${evt.target.getLatLng().lng.toFixed(6)}`);
+    cb();
   });
 };
 
+const comparePinsCoordinates = (pinA, pinB) => {
+  const currentMainPinCoord = mainPinMarker.getLatLng();
+
+  const diffPinAX = pinA.location.lat - currentMainPinCoord.lat;
+  const diffPinAY = pinA.location.lng - currentMainPinCoord.lng;
+  
+  const diffPinBX = pinB.location.lat - currentMainPinCoord.lat;
+  const diffPinBY = pinB.location.lng - currentMainPinCoord.lng;
+
+  const distanceA = Math.sqrt(diffPinAX*diffPinAX + diffPinAY*diffPinAY);
+  const distanceB = Math.sqrt(diffPinBX*diffPinBX + diffPinBY*diffPinBY);
+
+  return distanceA - distanceB;
+};
+
 const setDataPins = (array) => {
-  Array.from(array).slice(0, DATA_ARRAY_LENGTH).forEach(obj => 
+
+  pinMapLayerGoup.clearLayers();
+
+  Array.from(array)
+    .slice()
+    .sort(comparePinsCoordinates)
+    .slice(0, 30)
+    .sort(comparePins)
+    .slice(0, DATA_ARRAY_LENGTH)
+    .forEach(obj => 
     {
       const pinIcon = L.icon(
         {
@@ -97,18 +127,14 @@ const setDataPins = (array) => {
         {
           icon: pinIcon
         },
-      );
-
-      pinMarker
-        .addTo(map)
-        .bindPopup(
-          createCard(obj),
-          {
-            keepInView: true,
-          },
-        );
-      
-      setData(obj);
+      )
+      .bindPopup(
+        createCard(obj),
+        {
+          keepInView: true,
+        },
+      )
+      pinMarker.addTo(pinMapLayerGoup);
     }
   );
 };

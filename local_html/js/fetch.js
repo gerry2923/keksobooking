@@ -24,8 +24,8 @@ const createFetchGet = (onSuccess,onError) => () => {
           throw new Error(`Ошибка при загрузке данных ${response.status} ${response.statusText}`);
           
         })
-        .then((json) => {
-          onSuccess(json);
+        .then((pins) => {
+          onSuccess(pins);
         })
         .catch( (err) => {
           onError(err);

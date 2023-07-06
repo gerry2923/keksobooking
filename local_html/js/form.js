@@ -2,6 +2,7 @@ import { createFetchPost } from './fetch.js';
 import { checkEnterKey } from './util.js';
 import { getMainPinCoord, setMainPinCoord } from './map.js';
 import { showError, showSuccessMsg } from './pop-up.js';
+import { clearFilter } from './filter.js';
 
 const HousingPricePerNight = {
   "flat": 1000,
@@ -189,6 +190,7 @@ const clearForm = () => {
   resetToDefaultSelection(form.querySelector('#room_number').children, 'selected', '1');
   resetToDefaultCheckBox(form.querySelectorAll('.feature__checkbox'));
   
+  clearFilter();
 };
 
 const sendDataSuccess = () => {
@@ -225,6 +227,23 @@ const onResetKey = (evt) => {
   if(checkEnterKey(evt.key)) {
     clearForm();
   }
+};
+
+
+export const setClearFilterEvent = (cb) => {
+  btnReset.addEventListener('click', (evt) => {
+    console.log('clicking');
+    onResetClick(evt);
+    clearFilter();
+    console.log(cb);
+    cb();
+  });
+
+  btnReset.addEventListener('keydown', (evt) => {
+    onResetKey(evt);
+    clearFilter();
+    cb();
+  });
 };
 
 btnReset.addEventListener('click', onResetClick);
