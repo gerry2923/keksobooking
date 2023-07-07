@@ -9,11 +9,6 @@ import { setFilterHandler } from './filter.js';
 
 const RERENDER_DELAY = 500;
 
-console.log(_.random(0, 5));
-
-
-
-
 /**
  * 
  * @param {*} selector  - класс или id элемента, детей первой вложенности которого надо отключить или включить 

@@ -194,8 +194,13 @@ const clearForm = () => {
 };
 
 const sendDataSuccess = () => {
+  // 1. Очищаем форму
   clearForm();
+
+  // 2. Показываем успешное сообщение об отправки формы
   showSuccessMsg();
+
+  // 3. показать объявление на карте (не было в задании)
 };
 
 
@@ -232,10 +237,8 @@ const onResetKey = (evt) => {
 
 export const setClearFilterEvent = (cb) => {
   btnReset.addEventListener('click', (evt) => {
-    console.log('clicking');
     onResetClick(evt);
     clearFilter();
-    console.log(cb);
     cb();
   });
 
@@ -248,5 +251,72 @@ export const setClearFilterEvent = (cb) => {
 
 btnReset.addEventListener('click', onResetClick);
 btnReset.addEventListener('keydown', onResetKey);
+
+//  upload pictures --->
+
+const adFormField = document.querySelector('.ad-form__field input[type=file]');
+const adFormHeaderPreview = document. querySelector('.ad-form-header__preview img');
+
+const adFormUpload = document.querySelector('.ad-form__upload input[type=file]');
+const adFormPhotoContainer = document.querySelector('.ad-form__photo-container');
+const adFormPhoto = document.querySelector('.ad-form__photo');
+
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
+
+adFormField.addEventListener('change', () => {
+  const file = adFormField.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some( (it) => {
+    return fileName.endsWith(it);
+  } );
+
+  if(matches) {
+    
+    const reader = new FileReader();
+    reader.addEventListener('load', (evt) => {
+      adFormHeaderPreview.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
+  } 
+});
+
+
+adFormUpload.addEventListener('change', () => {
+  const file = adFormUpload.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some( (it) => {
+    return fileName.endsWith(it);
+  } );
+
+ 
+
+  if(matches) {
+    
+    const reader = new FileReader();
+    reader.addEventListener('load', (evt) => {
+      if(!adFormPhoto.style.backgroundImage) {
+        adFormPhoto.style.backgroundImage = `url(${reader.result})`;
+        adFormPhoto.style.backgroundRepeat = 'no-repeat';
+        adFormPhoto.style.backgroundPosition = 'center';
+        adFormPhoto.style.backgroundSize = 'contain';
+      } else {
+        const newPhoto = document.createElement('div');
+        newPhoto.className = 'ad-form__photo';
+        newPhoto.setAttribute('style', `background-image: url(${reader.result});
+                                        background-repeat: no-repeat;
+                                        background-position: center;
+                                        background-size: contain;`);
+    
+      adFormPhotoContainer.appendChild(newPhoto);
+    }
+  });
+
+    reader.readAsDataURL(file);
+  } 
+});
 
 export {setAddress};
